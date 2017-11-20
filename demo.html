@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+		<title>Jquery</title>
+		<style type="text/css">
+			body{
+				font-family: 'Raleway';
+				font-size: 13px;
+				background-color: #fff;
+				color: #555;
+				margin: 0px;
+				padding-left:0px;
+				position: relative;
+				transition: all .5s ease;
+				-webkit-transition: all .5s ease;
+				-moz-transition: all .5s ease;
+				-o-transition: all .5s ease;
+				-ms-transition: all .5s ease;
+			}
+			body.menu-open{
+				/*background-color: #333;
+				color: #fff;
+				left: 250px;*/
+			}
+			a:hover,a:focus{
+				outline: none;
+			}
+			#menu{
+				position: fixed;				
+				top: 20px;
+				left: 20px;
+				cursor: pointer;
+				z-index: 9;
+			}
+			.line{
+				top: 0px;
+				width:25px;
+				height: 4px;
+				background-color: white;
+				margin-bottom: 3px;				
+				display: block;
+				position: relative;				
+				transition: all .5s ease;
+				-webkit-transition: all .5s ease;
+				-moz-transition: all .5s ease;
+				-o-transition: all .5s ease;
+				-ms-transition: all .5s ease;
+			}
+			#menu .line:nth-child(1){
+				transform: rotate(0deg);
+				-webkit-transform: rotate(0deg);
+				-moz-transform: rotate(0deg);
+				-o-transform: rotate(0deg);
+				-ms-transform: rotate(0deg);
+			}
+			#menu .line:nth-child(2){
+				opacity: 1;
+			}
+			#menu .line:nth-child(3){
+				transform: rotate(0deg);
+				-webkit-transform: rotate(0deg);
+				-moz-transform: rotate(0deg);
+				-o-transform: rotate(0deg);
+				-ms-transform: rotate(0deg);
+			}
+			.menu-open #menu .line:nth-child(1){
+				transform: rotate(45deg);
+				-webkit-transform: rotate(45deg);
+				-moz-transform: rotate(45deg);
+				-o-transform: rotate(45deg);
+				-ms-transform: rotate(45deg);
+				top: 5px;				
+			}
+			.menu-open #menu .line:nth-child(2){
+				opacity: 0;
+			}
+			.menu-open #menu .line:nth-child(3){
+				transform: rotate(-45deg);
+				-webkit-transform: rotate(-45deg);
+				-moz-transform: rotate(-45deg);
+				-o-transform: rotate(-45deg);
+				-ms-transform: rotate(-45deg);
+				top: -9px;				
+			}
+			#wrapper{
+				position: fixed;
+				width: 250px;
+				height: 100%;
+				top: 0;
+				left: -250px;
+				background-color: #000;
+				color: #fff;
+				transition: all 0.5s ease;
+				-webkit-transition: all 0.5s ease;
+				-moz-transition: all 0.5s ease;
+				-o-transition: all 0.5s ease;
+				-ms-transition: all 0.5s ease;
+			}
+			.menu-open #wrapper{
+				left:0;
+			}
+			#sidebar-menu{
+				list-style: none;
+				padding-left: 10px;
+				margin-right: 10px;
+			}
+			#sidebar-menu li a > i{
+				font-size: 17px;
+				margin-right: 5px;
+			}
+			#sidebar-menu li ul li a:not(.dropdown) > i{
+				font-size: 10px;
+			}
+			#sidebar-menu li a span i{
+				float: right;
+			}
+			#sidebar-menu li a{
+				padding: 10px;
+				background-color: #3f3f3f;
+				margin-bottom: 2px;
+				color: #a4a4a4;
+				display: block;
+				text-decoration: none;
+				border-left:5px solid transparent;
+				transition: all 0.5s ease;
+				-webkit-transition: all 0.5s ease;
+				-moz-transition: all 0.5s ease;
+				-o-transition: all 0.5s ease;
+				-ms-transition: all 0.5s ease;
+			}
+			#sidebar-menu ul{
+				display: none;
+				padding-left: 0px;
+				list-style: none;				
+			}
+			#sidebar-menu li a:hover,#sidebar-menu li a.active{
+				padding-left: 20px;
+				font-weight: bold;
+				background-color: #3f3f3f;
+				border-left:5px solid #7d7d7d;
+				color: #fff;
+				/*text-shadow: 3px 3px 2px;
+				-webkit-text-shadow: 3px 3px 2px;
+				-moz-text-shadow: 3px 3px 2px;
+				-o-text-shadow: 3px 3px 2px;
+				-ms-text-shadow: 3px 3px 2px;*/
+			}
+			#sidebar-menu li a:hover i{
+				transform: rotate(360deg);
+				transition: all 0.5s ease;
+				-webkit-transition: all 0.5s ease;
+				-moz-transition: all 0.5s ease;
+				-o-transition: all 0.5s ease;
+				-ms-transition: all 0.5s ease;
+			}
+			#sidebar-menu li ul li a{
+			    padding-left: 20px;
+			    list-style: none;
+			}
+			#sidebar-menu li ul li a:hover{
+			    padding-left: 40px;
+			}
+			#sidebar-menu li ul li ul li a{
+			    padding-left: 40px;
+			    list-style: none;
+			}
+			#sidebar-menu li ul li ul li a:hover{
+			    padding-left: 60px;
+			}
+			#sidebar-menu li ul li ul li ul li a{
+			    padding-left: 60px;
+			    list-style: none;
+			}
+			#sidebar-menu li ul li ul li ul li a:hover{
+			    padding-left: 80px;
+			}
+			section{
+				min-height: 100vh;
+				padding: 20px;
+				left: 0px;
+				position: relative;
+				color: #fff;
+				transition: all .5s ease;
+				-webkit-transition: all .5s ease;
+				-moz-transition: all .5s ease;
+				-o-transition: all .5s ease;
+				-ms-transition: all .5s ease;
+			}
+			section .trasparent{
+				/*background: rgba(0,0,0,0.7);
+				padding: 20px;*/
+			}
+			.menu-open section{
+				left: 250px;
+			}
+			#section1{
+				background: #b7823e;
+				/*background: url('images/4.jpg') no-repeat fixed center center / cover;*/
+			}
+			#section2{
+				background: #84B1FF;
+				/*background: url('images/5.jpg') no-repeat fixed center center / cover;*/
+			}
+			#section3{
+				background: #9957d7;
+				/*background: url('images/6.jpg') no-repeat fixed center center / cover;*/
+			}
+			#section4{
+				background: #4c9295;
+				/*background: url('images/5.jpg') no-repeat fixed center center / cover;*/
+			}			
+			.form-element{
+				margin-bottom: 10px;
+			}
+			.form-element label{
+				font-weight: bold;
+				/* min-width: 100px;
+				display: inline-block; */
+			}
+			input,textarea {
+				font-family: 'Raleway';
+			    font-size:13px;
+			    background: transparent;
+			    color: #fff;
+			    border: 1px solid #fff;
+			    border-radius: 5px;
+			    min-height: 25px;
+			    padding: 5px 10px;
+			    width: 100%;
+			}
+			.grid-item{
+				margin: 0px;
+				padding: 0px;				
+				transform:scale(1);
+			}
+			.grid-wrap{
+				overflow: hidden;
+				margin: 5px 0px 0px 5px;
+			}
+			.grid-item img{
+				cursor: pointer;
+				/*border:1px solid transparent;*/
+				transform:scale(1);
+				transition: all .5s ease;
+				-webkit-transition: all .5s ease;
+				-moz-transition: all .5s ease;
+				-o-transition: all .5s ease;
+				-ms-transition: all .5s ease;
+			}
+			.grid-item:nth-child(1) img:hover{
+				transform:scale(2);
+			}
+			.grid-item:nth-child(2) img:hover{
+				filter:blur(5px);
+			}
+			.grid-item:nth-child(3) img:hover{
+				filter:grayscale(100%);
+			}
+			.grid-item:nth-child(4) img:hover{
+				border-radius:50% / 25%;
+			}
+			.grid-item:nth-child(5) img:hover{
+				transform:scale(2) rotate(15deg);
+			}
+			.grid-item:nth-child(6) img{
+				transform:scale(2);
+			}
+			.grid-item:nth-child(6) img:hover{
+				transform:scale(1);
+			}
+			.grid-item:nth-child(7) img:hover{
+				opacity:0.5;
+			}
+			.grid-item:nth-child(n+8) img:hover{
+				transform:scale(2);
+			}
+			
+			/** download button effect **/
+			button.dlbtn {
+				display: inline-block;
+				position: relative;
+				height: 45px;
+				line-height: 40px;
+				overflow: hidden;
+				padding: 0 30px;
+				font-size: 12px;
+				font-weight: bold;
+				color: #fff;
+				background-color: #00807b;
+				text-decoration: none;
+				cursor: pointer;
+				border: 3px solid #1aaa9f;
+				-webkit-border-radius: 2px;
+				-moz-border-radius: 2px;
+				border-radius: 2px;
+				-webkit-transition: all 0.4s;
+				-moz-transition: all 0.4s;
+				transition: all 0.4s;
+			}
+
+			button.dlbtn:hover, button.dlbtn:focus {
+				color: #fff;
+				padding-right: 90px;
+				background-color: #1aaa9f;
+				border-color: #0c7d74;
+			}
+			button.dlbtn .details {
+				position: absolute;
+				line-height: 0px;
+				top: 5px;
+				right: -15px;
+				opacity: 0;
+				background: #0c7d74;
+				color: #fff;
+				text-align: center;
+				padding: 10px;
+				-webkit-border-radius: 3px;
+				-moz-border-radius: 3px;
+				border-radius: 3px;
+				-webkit-transition: right 0.4s linear, opacity 0.25s;
+				-moz-transition: right 0.4s linear, opacity 0.25s;
+				transition: right 0.4s linear, opacity 0.25s;
+			}
+			button.dlbtn .details .size {
+				display: block;
+				padding-top: 3px;
+			}
+
+			button.dlbtn:hover .details, button.dlbtn:focus .details {
+				right: 8px;
+				opacity: 1;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<h3 style="text-align:center;">Testing <br/>Hardik</h3>
+			<ul id="sidebar-menu">
+				<li><a href="#section1"><i class="fa fa-home"></i> Home</a></li>
+				<li><a href="#section2"><i class="fa fa-users"></i> About Us</a></li>
+				<li><a href="#section3"><i class="fa fa-file-text-o"></i> Blog</a></li>
+				<li>
+					<a href="#" class="dropdown"><i class="fa fa-bars"></i> Menu Level <span><i class="fa fa-chevron-right"></i></span></a>
+					<ul>
+						<li><a href="#"><i class="fa fa-circle-o"></i> Menu level 1</a></li>
+						<li>
+							<a href="#" class="dropdown"><i class="fa fa-bars"></i> Menu level 1 <span><i class="fa fa-chevron-right"></i></span></a>
+							<ul>
+								<li><a href="#"><i class="fa fa-circle-o"></i> Menu level 2</a></li>
+								<li>
+									<a href="#" class="dropdown"><i class="fa fa-bars"></i> Menu level 2 <span><i class="fa fa-chevron-right"></i></span></a>
+									<ul>
+										<li><a href="#"><i class="fa fa-circle-o"></i> Menu level 3</a></li>
+										<li><a href="#"><i class="fa fa-circle-o"></i> Menu level 3</a></li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li><a href="#section4"><i class="fa fa-phone"></i> Contact Us</a></li>
+			</ul>
+		</div>
+		<div id="menu">
+			<div class="line"></div>
+			<div class="line"></div>
+			<div class="line"></div>
+		</div>
+		<section id="section1">
+			<h3><i class="fa fa-home"></i> HOME</h3>
+			<div class="trasparent">
+				<h4>What is Lorem Ipsum?</h4>
+				<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+
+				<h4>Why do we use it?</h4>
+				<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+
+				<h4>Where does it come from?</h4>
+				<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p>
+				<p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
+
+				<h4>Where can I get some?</h4>
+				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+			</div>
+		</section>
+		<section id="section2">
+			<h3><i class="fa fa-users"></i> ABOUT US</h3>
+			<div class="trasparent">
+				<p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+				<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+			</div>
+		</section>
+		<section id="section3">
+			<h3><i class="fa fa-file-text-o"></i> BLOG</h3>
+			<div class="trasparent">
+				<div id="grid">
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/001.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/012.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/002.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/003.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/004.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/005.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/013.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/006.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/007.png" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/008.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/009.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/010.jpg" class="img-responsive" />
+						</div>
+					</div>
+					<div class="grid-item col-md-3 col-sm-4 col-xs-12">
+						<div class="grid-wrap">
+							<img src="images/011.jpg" class="img-responsive" />
+						</div>
+					</div>				
+				</div>
+			</div>
+		</section>
+		<section id="section4">
+			<h3><i class="fa fa-phone"></i> CONTACT US</h3>
+			<div class="trasparent">
+				<form action="">
+					<div class="form-element">
+						<label>Name:</label>
+						<input type="text" name="" placeholder="Enter name" />
+					</div>
+					<div class="form-element">
+						<label>Email:</label>
+						<input type="text" name="" placeholder="Enter email" />
+					</div>
+					<div class="form-element">
+						<label>Message:</label>
+						<textarea type="text" name=""  placeholder="Enter message"></textarea>
+					</div>
+					<button class="dlbtn">Send<span class="details"><i class="fa fa-send"></i></span></button>
+				</form>
+			</div>
+		</section>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js"></script>		
+		<script type="text/javascript">
+			var $grid = $('#grid').isotope({
+				layout:'masonry',
+				itemSelector:'.grid-item'
+			});
+			$('#menu').click(function(){
+				$('body').toggleClass('menu-open');
+			});
+			$('#sidebar-menu a').click(function(e){
+				e.preventDefault();
+				if($(this).hasClass('dropdown')){
+					$(this).next('ul').slideToggle();
+					$(this).find('i').toggleClass('fa-chevron-down da-chevron-right');
+			    }else{
+			    	$('#sidebar-menu a').removeClass('active');
+			    	var section = $(this).prop('hash');
+					$('html, body').animate({
+				        scrollTop: $(section).offset().top
+				    }, 500);
+				    $(this).addClass('active');
+			    }
+			});
+		</script>
+	</body>
+</html>
